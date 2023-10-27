@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Arquivos de Origem\Utilities">
+      <UniqueIdentifier>{69bed679-1cab-4d04-aef3-25b4a15a7b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Arquivos de Origem\Shaders">
+      <UniqueIdentifier>{f0ea883d-7fea-4c77-ac60-c45ac15ffd8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,23 +30,48 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="Operations.cpp">
+    <ClCompile Include="Block.h">
       <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="Chunk.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="Operations.cpp">
+      <Filter>Arquivos de Origem\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Arquivos de Origem\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.vs" />
-    <None Include="shader.fs" />
+    <None Include="shader.fs">
+      <Filter>Arquivos de Origem\Shaders</Filter>
+    </None>
+    <None Include="shader.vs">
+      <Filter>Arquivos de Origem\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
-    <ClInclude Include="Operations.h">
-      <Filter>Arquivos de Origem</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Arquivos de Origem</Filter>
+    </ClInclude>
+    <ClInclude Include="Chunk.h">
+      <Filter>Arquivos de Origem</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Arquivos de Origem</Filter>
+    </ClInclude>
+    <ClInclude Include="Operations.h">
+      <Filter>Arquivos de Origem\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Arquivos de Origem\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

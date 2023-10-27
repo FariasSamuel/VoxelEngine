@@ -2,15 +2,9 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include<math.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include "Operations.h"
-#include "Shader.h"
-#include "Camera.h"
-
-#include<vector>
+#include "Game.h"
+#include <thread>
+#include <vector>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -67,7 +61,7 @@ bool procurar() {
     }
     return isnt;
 }
-
+Game game(800, 600);
 int main()
 {
     // glfw: initialize and configure
@@ -99,173 +93,50 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    Shader s("shader.vs","shader.fs");
-    s.use();
     
-    glEnable(GL_DEPTH_TEST);
+    game.Init();
 
+    double prevTime = 0.0;
+    double crntTime = 0.0;
+    double timeDiff;
+    unsigned int counter = 0;
 
-
-    float vertices[] = {
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f, 
-         0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f, -0.5f,  
-        -0.5f,  0.5f, -0.5f,  
-        -0.5f, -0.5f, -0.5f,  
-
-        -0.5f, -0.5f,  0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f,  
-        -0.5f, -0.5f,  0.5f,  
-
-        -0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f, -0.5f,  
-        -0.5f, -0.5f, -0.5f,  
-        -0.5f, -0.5f, -0.5f,  
-        -0.5f, -0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f,  
-
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f, -0.5f,  
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-
-        -0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f, -0.5f,  0.5f,  
-        -0.5f, -0.5f,  0.5f,  
-        -0.5f, -0.5f, -0.5f,  
-
-        -0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f, -0.5f,  
-    };
-    
-
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindVertexArray(0);    
-
-    glm::mat4 model = glm::mat4(1.0f); 
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 projection = glm::mat4(1.0f);
-    
-    projection = pespective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-    unsigned int modelLoc = glGetUniformLocation(s.ID, "model");
-    unsigned int viewLoc = glGetUniformLocation(s.ID, "view");
-    unsigned int projectionLoc = glGetUniformLocation(s.ID, "projection");
-
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    
-
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-    float x = camera.Position.x - 5;
-    float y = camera.Position.y - 3;
-    float z = camera.Position.z - 5;
-
-    int max = 10;
-    float lim = x+10;
-    float piso = x;
-
-    unsigned int colorLoc = glGetUniformLocation(s.ID, "color");
- 
-
+    std::thread gen1(&Game::generation,&game,true);
+    std::thread gen2(&Game::generation, &game, false);
+    //std::thread destroy(&Game::destroier, &game);
 
     while (!glfwWindowShouldClose(window))
     {
         
+        crntTime = glfwGetTime();
+        timeDiff = crntTime - prevTime;
+        counter++;
+        if (timeDiff >= 1.0 / 30.0) {
+            //std::string FPS = std::to_string((1.0 / timeDiff) * counter);
+            //std::string ms = std::to_string((timeDiff / counter) * 1000);
+            //std::cout << FPS << " " << ms << std::endl;
+            prevTime = crntTime;
+            counter = 0;
+        }
 
         processInput(window);
-
+        
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //glPolygonMode(GL_FRONT_AND_BACK,
-        //    GL_LINE);
+        glPolygonMode(GL_FRONT_AND_BACK,
+            GL_LINE);
+        game.Update(timeDiff);
+        game.Render();
         
-        s.use();
-        float radius = 10.0f;
-        float camX = static_cast<float>(sin(glfwGetTime()) * radius);
-        float camZ = static_cast<float>(cos(glfwGetTime()) * radius);
-        
-        view = camera.getView();
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        s.use();
-        glBindVertexArray(VAO);
-        std::cout << (int)camera.Position.x + ((int)(5 + (camera.Pitch + 33) / 11) * sin(glm::radians(90 - camera.Yaw))) << " " << y + 1 << (int)camera.Position.z + ((int)(5 + (camera.Pitch + 33) / 11) * cos(glm::radians(90 - camera.Yaw))) << std::endl;
-        //std::cout << (int)camera.Position.x + (int)(10 * camera.Front.x) << " " << (int)camera.Position.z + (camera.Front.z / abs(camera.Front.z)) * (10 + (int)(10 * camera.Front.y)) << std::endl;
-        if (camera.Position.x > lim ) {
-            max += 10;
-            lim += 10;
-        }
-        if (camera.Position.x < piso) {
-            idx -= 10;
-            piso -= 10;
-        }
-        for ( int i = idx; i < max; i++)
-        {
-            for ( int j = idy; j < 10; j++)
-            {
-                    glUniform4f(colorLoc, 1.0f, 0.5f, 0.2f, 1.0f);
-                    glm::mat4 model = glm::mat4(1.0f); 
-                    model = glm::translate(model, glm::vec3(i+x,y,j + z));
-                    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-                    glDrawArrays(GL_TRIANGLES, 0, 36);
-                
-            }
-        }
-        //m = glm::translate(m, glm::vec3((int)camera.Position.x + floor(ceil(6 * sin(glm::radians(90 - camera.Pitch))) * sin(glm::radians(90 - camera.Yaw))) , y + 1, (int)camera.Position.z + floor(ceil(6 * sin(glm::radians(90 - camera.Pitch))) * cos(glm::radians(90 - camera.Yaw)))));
-        glm::mat4 m = glm::mat4(1.0f);
-        glUniform4f(colorLoc, 2.0f, 0.0f, 0.0f, 1.0f);
-        int isnt = procurar();
-        if (!isnt) {
-            m = glm::translate(m, glm::vec3((int)camera.Position.x + floor((int)(5 + (camera.Pitch + 33) / 11) * sin(glm::radians(90 - camera.Yaw))), y + 1, (int)camera.Position.z + floor((int)(5 + (camera.Pitch + 33) / 11) * cos(glm::radians(90 - camera.Yaw)))));
-        }
-        else {
-            m = glm::translate(m, glm::vec3((int)camera.Position.x + floor((int)(5 + (camera.Pitch + 33) / 11) * sin(glm::radians(90 - camera.Yaw))), y + 2, (int)camera.Position.z + floor((int)(5 + (camera.Pitch + 33) / 11) * cos(glm::radians(90 - camera.Yaw)))));
-
-        }
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(m));
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        for (int i = 0; i < v[0].size(); i++)
-        {
-            glm::mat4 mod = glm::mat4(1.0f);
-            mod = glm::translate(mod, glm::vec3(v[0][i], y + 1, v[1][i]));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(mod));
-            glUniform4f(colorLoc, cor[0][i], cor[1][i], cor[2][i] , 1.0f);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
-        s.use();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteProgram(s.ID);
-
+    ResourceManager::Clear();
     glfwTerminate();
+    gen1.join();
+    gen2.join();
+    //destroy.join();
     return 0;
 }
 
@@ -275,13 +146,13 @@ void processInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
     const float cameraSpeed = 0.05f; // adjust accordingly
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.processInput(FORWARD);
+        game.camera.processInput(FORWARD);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.processInput(BACKWARD);
+        game.camera.processInput(BACKWARD);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.processInput(LEFT);
+        game.camera.processInput(LEFT);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.processInput(RIGHT);
+        game.camera.processInput(RIGHT);
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && glfwGetTime()-lastTime  > 1) {
         (colors< 3) ? colors++: colors = 3;
         lastTime = glfwGetTime();
@@ -331,32 +202,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS && glfwGetTime() - lastTime > 0.25) {
-        auto x = v[0].begin();
-        auto y = v[1].begin();
-        for (int i = 0; i < v[0].size(); i++) {
-            if (v[0][i] == (int)camera.Position.x + floor((int)(5 + (camera.Pitch + 33) / 11) * sin(glm::radians(90 - camera.Yaw))) && v[1][i] == (int)camera.Position.z + floor((int)(5 + (camera.Pitch + 33) / 11) * cos(glm::radians(90 - camera.Yaw)))) {
-                v[0].erase(x);
-                v[1].erase(y);
-                break;
-            }
-            else {
-                std::advance(x, 1);
-                std::advance(y, 1);
-            }
-        }
-    }
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetTime() - lastTime > 0.25) {
-        int isnt = procurar();
-        if (!isnt) {
-            v[0].push_back((int)camera.Position.x + floor((int)(5 + (camera.Pitch + 33) / 11) * sin(glm::radians(90 - camera.Yaw))));
-            v[1].push_back((int)camera.Position.z + floor((int)(5 + (camera.Pitch + 33) / 11) * cos(glm::radians(90 - camera.Yaw))));
-            cor[0].push_back(c[0][colors]);
-            cor[1].push_back(c[1][colors]);
-            cor[2].push_back(c[2][colors]);
-        }
-        lastTime = glfwGetTime();
-    }
+    
     if (firstMouse) // initially set to true
     {
         lastX = xpos;
@@ -368,5 +214,5 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     lastX = xpos;
     lastY = ypos;
 
-    camera.mouse_input(xoffset, yoffset);
+    game.camera.mouse_input(xoffset, yoffset);
 }
