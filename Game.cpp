@@ -96,15 +96,17 @@ void Game::Init()
 }
 
 bool Game::perto(std::pair<int,int> i) {
-    return (abs(i.first - camera.Position.x) > 10) || (abs(i.second - camera.Position.z) > 10);
+    
+    return (abs(i.first - camera.Position.x) > WORLD_SIZE) || (abs(i.second - camera.Position.z) > WORLD_SIZE);
 }
 
-void Game::destroier() {
-    while (true) {
+void Game::destroier(GLFWwindow* window) {
+    while (!glfwWindowShouldClose(window)) {
         std::lock_guard<std::mutex> guard(g_pages_mutex);
-        std::vector<std::pair<int, int>> v;
-        std::remove_if(entities.begin(), entities.end(), perto);
-        std::remove_if(used.begin(), used.end(), perto);
+        //std::vector<std::pair<int, int>>::iterator v;
+        //std::cout << "nya" << std::endl;
+        auto v = std::remove_if(entities.begin(), entities.end(), [this](const std::pair<int, int> i) { return (abs(i.first - camera.Position.x) > WORLD_SIZE) || (abs(i.second - camera.Position.z) > WORLD_SIZE); });
+        v = std::remove_if(used.begin(), used.end(), [this](const std::pair<int, int> i) { return (abs(i.first - camera.Position.x) > WORLD_SIZE) || (abs(i.second - camera.Position.z) > WORLD_SIZE); });
         /*for (auto i: entities) {
             int disx = abs(i.first - camera.Position.x);
             int disz = abs(i.second - camera.Position.z);
@@ -128,16 +130,16 @@ void Game::generation(bool a) {
        
             std::lock_guard<std::mutex> guard(g_pages_mutex);
             if (a == true) {
-                for (int i = (int)this->camera.Position.x - 10; i < (int)this->camera.Position.x; i++) {
-                    for (int j = (int)this->camera.Position.z - 10; j < (int)this->camera.Position.z; j++) {
+                for (int i = (int)this->camera.Position.x - WORLD_SIZE; i < (int)this->camera.Position.x; i++) {
+                    for (int j = (int)this->camera.Position.z - WORLD_SIZE; j < (int)this->camera.Position.z; j++) {
                         if (!procurar(i, j)) {
                             this->entities.push_back(std::make_pair(i, j));
                             this->used.push_back(std::make_pair(i, j));
                         }
                     }
                 }
-                for (int i = (int)this->camera.Position.x - 10; i < (int)this->camera.Position.x; i++) {
-                    for (int j = (int)this->camera.Position.z; j < (int)this->camera.Position.z + 10; j++) {
+                for (int i = (int)this->camera.Position.x - WORLD_SIZE; i < (int)this->camera.Position.x; i++) {
+                    for (int j = (int)this->camera.Position.z; j < (int)this->camera.Position.z + WORLD_SIZE; j++) {
                         if (!procurar(i, j)) {
                             this->entities.push_back(std::make_pair(i, j));
                             this->used.push_back(std::make_pair(i, j));
@@ -146,16 +148,16 @@ void Game::generation(bool a) {
                 }
             }
             else {
-                for (int i = (int)this->camera.Position.x; i < (int)this->camera.Position.x + 10; i++) {
-                    for (int j = (int)this->camera.Position.z - 10; j < (int)this->camera.Position.z; j++) {
+                for (int i = (int)this->camera.Position.x; i < (int)this->camera.Position.x + WORLD_SIZE; i++) {
+                    for (int j = (int)this->camera.Position.z - WORLD_SIZE; j < (int)this->camera.Position.z; j++) {
                         if (!procurar(i, j)) {
                             this->entities.push_back(std::make_pair(i,j));
                             this->used.push_back(std::make_pair(i, j));
                         }
                     }
                 }
-                for (int i = (int)this->camera.Position.x; i < (int)this->camera.Position.x + 10; i++) {
-                    for (int j = (int)this->camera.Position.z; j < (int)this->camera.Position.z + 10; j++) {
+                for (int i = (int)this->camera.Position.x; i < (int)this->camera.Position.x + WORLD_SIZE; i++) {
+                    for (int j = (int)this->camera.Position.z; j < (int)this->camera.Position.z + WORLD_SIZE; j++) {
                         if (!procurar(i, j)) {
                             this->entities.push_back(std::make_pair(i, j));
                             this->used.push_back(std::make_pair(i, j));
@@ -195,11 +197,11 @@ void Game::Render()
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
     s.Use();
     glBindVertexArray(VAO);
-    std::lock_guard<std::mutex> guard(g_pages_mutex);
+    //std::lock_guard<std::mutex> guard(g_pages_mutex);
     for (int i = 0; i < entities.size();i++)
     {
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(i.first, 0, i.second));
+        model = glm::translate(model, glm::vec3(entities[i].first, 0, entities[i].second));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }

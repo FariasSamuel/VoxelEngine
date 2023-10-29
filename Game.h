@@ -1,5 +1,8 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 #include<math.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -10,7 +13,7 @@
 #include "ResourceManager.h"
 
 #include <mutex>
-#include <list>
+#include <vector>
 
 class Game
 {
@@ -38,9 +41,11 @@ public:
 	void Update(float dt);
 	void Render();
 	void generation(bool a);
-	void destroier();
+	void destroier(GLFWwindow* window);
+	bool perto(std::pair<int, int> i);
 private:
 	unsigned int VBO, VAO;
 	bool procurar(int x, int z);
-	bool perto(std::pair<int,int> i);
+	int WORLD_SIZE = 40;
+	
 };

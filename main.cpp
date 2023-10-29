@@ -103,7 +103,7 @@ int main()
 
     std::thread gen1(&Game::generation,&game,true);
     std::thread gen2(&Game::generation, &game, false);
-    //std::thread destroy(&Game::destroier, &game);
+    std::thread destroy(&Game::destroier, &game,  window);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -112,9 +112,9 @@ int main()
         timeDiff = crntTime - prevTime;
         counter++;
         if (timeDiff >= 1.0 / 30.0) {
-            //std::string FPS = std::to_string((1.0 / timeDiff) * counter);
-            //std::string ms = std::to_string((timeDiff / counter) * 1000);
-            //std::cout << FPS << " " << ms << std::endl;
+            std::string FPS = std::to_string((1.0 / timeDiff) * counter);
+            std::string ms = std::to_string((timeDiff / counter) * 1000);
+            std::cout << FPS << " " << ms << " " << game.entities.size() << std::endl;
             prevTime = crntTime;
             counter = 0;
         }
@@ -136,7 +136,7 @@ int main()
     glfwTerminate();
     gen1.join();
     gen2.join();
-    //destroy.join();
+    destroy.join();
     return 0;
 }
 
