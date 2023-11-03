@@ -102,8 +102,7 @@ int main()
     unsigned int counter = 0;
 
     std::thread gen1(&Game::generation,&game,true);
-    std::thread gen2(&Game::generation, &game, false);
-    std::thread destroy(&Game::destroier, &game,  window);
+    //std::thread destroy(&Game::destroier, &game,  window);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -135,8 +134,8 @@ int main()
     ResourceManager::Clear();
     glfwTerminate();
     gen1.join();
-    gen2.join();
-    destroy.join();
+    //gen2.join();
+    //destroy.join();
     return 0;
 }
 

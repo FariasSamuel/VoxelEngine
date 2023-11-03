@@ -9,12 +9,11 @@
 #include "Operations.h"
 #include "Shader.h"
 #include "Camera.h"
-#include "Block.h"
 #include "ResourceManager.h"
 
 #include <mutex>
 #include <vector>
-
+#include "Chunk.h"
 class Game
 {
 public:
@@ -29,7 +28,7 @@ public:
 	unsigned int modelLoc;
 	unsigned int viewLoc;
 	unsigned int projectionLoc;
-	std::vector<std::pair<int,int>> entities;
+	std::vector<Chunk> entities;
 	std::vector<std::pair<int, int>> used;
 	// constructor/destructor
 	Game(unsigned int width, unsigned int height);
@@ -46,6 +45,6 @@ public:
 private:
 	unsigned int VBO, VAO;
 	bool procurar(int x, int z);
-	int WORLD_SIZE = 40;
+	int WORLD_SIZE = 16;
 	
 };
