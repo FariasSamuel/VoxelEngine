@@ -98,22 +98,22 @@ void Game::generation(bool a) {
 
 		std::lock_guard<std::mutex> guard(g_pages_mutex);
 		try {
-			for (int i = (int)(this->camera.Position.x - 32) / 16; i < (int)(this->camera.Position.x + 32) / 16; i++) {
-				for (int j = (int)(this->camera.Position.z - 32) / 16; j < (int)(this->camera.Position.z + 32) / 16; j++) {
-					if (std::find(used.begin(), used.end(), std::make_pair(i*16 , j*16 )) == used.end()) {
+			for (int i = (int)(this->camera.Position.x - 64) / 32; i < (int)(this->camera.Position.x + 64) / 32; i++) {
+				for (int j = (int)(this->camera.Position.z - 64) / 32; j < (int)(this->camera.Position.z + 64) / 32; j++) {
+					if (std::find(used.begin(), used.end(), std::make_pair(i* 32, j* 32)) == used.end()) {
 						std::vector<Block> blocks;
 
-						for (int x = 0; x < 16; x++) {
-							for (int y = 0; y < 16; y++) {
-								
-								Block b(x, 0 ,y, orange);
+						for (int x = 0; x < 32; x++) {
+							for (int y = 0; y < 32; y++) {
+								int h = pl.generateHeight(x + (i* 32), y+(j* 32));
+								Block b(x, h ,y, orange);
 								blocks.push_back(b);
 							}
 						}
-						Chunk c(blocks, glm::vec3(i * 16, 0 , j * 16));
+						Chunk c(blocks, glm::vec3(i * 32, 0 , j * 32));
 						ChunkMesh m(c);
 						
-						this->used.push_back(std::make_pair(i * 16, j * 16));
+						this->used.push_back(std::make_pair(i * 32, j * 32));
 						
 						entities.push_back(m);
 					}
@@ -172,19 +172,19 @@ void Game::Render()
 		{			
 			glm::vec3 origin = entities[i].chunk.origin;
 
-			//int disx = (int)abs(origin.x - camera.Position.x);
-			//int disz = (int)abs(origin.z - camera.Position.z);
+			int disx = (int)abs(origin.x - camera.Position.x);
+			int disz = (int)abs(origin.z - camera.Position.z);
 
-			//if (disx <=  32 && disz <= 32) {
+			if (disx <=  32 && disz <= 32) {
 
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(origin.x, origin.y, origin.z));
-			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, glm::vec3(origin.x, origin.y, origin.z));
+				glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-			glBindVertexArray(VAO[i]);
-			glDrawArrays(GL_TRIANGLES, 0, entities[i].positionsList.size());
-			//glBindVertexArray(0);
-			//}
+				glBindVertexArray(VAO[i]);
+				glDrawArrays(GL_TRIANGLES, 0, entities[i].positionsList.size());
+				//glBindVertexArray(0);
+			}
 
 		}
 	}

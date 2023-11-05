@@ -17,6 +17,7 @@
 #include "CubeModel.h"
 #include "ChunkMesh.h"
 #include "Renderer.h"
+#include "PerlinNoiseGenerator.h"
 
 class Game
 {
@@ -33,7 +34,7 @@ public:
 	unsigned int viewLoc;
 	unsigned int projectionLoc;
 	int size;
-	//PerlinNoise pl;
+	PerlinNoiseGenerator pl;
 	std::vector<ChunkMesh> entities;
 	std::vector<std::pair<int, int>> used;
 	
