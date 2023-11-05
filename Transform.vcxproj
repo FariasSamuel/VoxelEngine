@@ -149,11 +149,16 @@
   <ItemGroup>
     <ClCompile Include="Block.h" />
     <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="ChunkMesh.cpp" />
+    <ClCompile Include="ChunkMesh.h" />
+    <ClCompile Include="CubeModel.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Operations.cpp" />
+    <ClCompile Include="PerlinNoiseGenerator.h" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="RawModel.h" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,10 +168,14 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chunk.h" />
+    <ClInclude Include="CubeModel.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Loader.h" />
     <ClInclude Include="Operations.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,15 +1,19 @@
-enum BlockType {
-	BlockType_Default = 0,
-	BlockType_Grass,
-	BlockType_Dirt,
-	BlockType_Water,
-	BlockType_Stone,
-	BlockType_Wood,
-	BlockType_Sand,
-	BlockType_NumTypes,
+#pragma once
+enum BlockType
+{
+	orange = 0,
+	green = 1,
+	blue = 1,
 };
 
-struct Block {
-	bool m_active;
-	BlockType m_blockType;
+class Block {
+public: 
+	int x, y, z;
+	 BlockType type;
+	Block(int x, int y, int z, BlockType t) {
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		this->type = t;
+	}
 };

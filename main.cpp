@@ -5,6 +5,7 @@
 #include "Game.h"
 #include <thread>
 #include <vector>
+#include "Loader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -62,10 +63,117 @@ bool procurar() {
     return isnt;
 }
 Game game(800, 600);
+glm::vec3 CubeModel::PX_POS[6] = {
+           glm::vec3(0.5f,0.5f,-0.5f),
+           glm::vec3(0.5f,-0.5f,-0.5f),
+           glm::vec3(0.5f,-0.5f,0.5f),
+           glm::vec3(0.5f,-0.5f,0.5f),
+           glm::vec3(0.5f,0.5f,0.5f),
+           glm::vec3(0.5f,0.5f,-0.5f)
+};
+glm::vec3 CubeModel::NX_POS[6] = {
+
+           glm::vec3(-0.5f,0.5f,-0.5f),
+           glm::vec3(-0.5f,-0.5f,-0.5f),
+           glm::vec3(-0.5f,-0.5f,0.5f),
+           glm::vec3(-0.5f,-0.5f,0.5f),
+           glm::vec3(-0.5f,0.5f,0.5f),
+           glm::vec3(-0.5f,0.5f,-0.5f)
+
+};
+
+glm::vec3 CubeModel::PY_POS[6] = {
+
+       glm::vec3(-0.5f,0.5f,0.5f),
+       glm::vec3(-0.5f,0.5f,-0.5f),
+       glm::vec3(0.5f,0.5f,-0.5f),
+       glm::vec3(0.5f,0.5f,-0.5f),
+       glm::vec3(0.5f,0.5f,0.5f),
+       glm::vec3(-0.5f,0.5f,0.5f)
+
+};
+
+glm::vec3 CubeModel::NY_POS[6] = {
+
+       glm::vec3(-0.5f,-0.5f,0.5f),
+       glm::vec3(-0.5f,-0.5f,-0.5f),
+       glm::vec3(0.5f,-0.5f,-0.5f),
+       glm::vec3(0.5f,-0.5f,-0.5f),
+       glm::vec3(0.5f,-0.5f,0.5f),
+       glm::vec3(-0.5f,-0.5f,0.5f)
+
+};
+
+glm::vec3 CubeModel::PZ_POS[6] = {
+
+       glm::vec3(-0.5f,0.5f,0.5f),
+       glm::vec3(-0.5f,-0.5f,0.5f),
+       glm::vec3(0.5f,-0.5f,0.5f),
+       glm::vec3(0.5f,-0.5f,0.5f),
+       glm::vec3(0.5f,0.5f,0.5f),
+       glm::vec3(-0.5f,0.5f,0.5f)
+
+};
+
+glm::vec3 CubeModel::NZ_POS[6] = {
+
+       glm::vec3(-0.5f,0.5f,-0.5f),
+       glm::vec3(-0.5f,-0.5f,-0.5f),
+       glm::vec3(0.5f,-0.5f,-0.5f),
+       glm::vec3(0.5f,-0.5f,-0.5f),
+       glm::vec3(0.5f,0.5f,-0.5f),
+       glm::vec3(-0.5f,0.5f,-0.5f)
+
+};
+
+glm::vec3 CubeModel::NORMALS[6] = {
+
+       glm::vec3(0.f, 0.f, 0.f),
+       glm::vec3(0.f, 0.f, 0.f),
+       glm::vec3(0.f, 0.f, 0.f),
+       glm::vec3(0.f, 0.f, 0.f),
+       glm::vec3(0.f, 0.f, 0.f),
+       glm::vec3(0.f, 0.f, 0.f)
+
+};
+glm::vec2 CubeModel::UV[6] = {
+    glm::vec2(0.f, 0.f),
+    glm::vec2(0.f, 1.f),
+    glm::vec2(1.f, 1.f),
+    glm::vec2(1.f, 1.f),
+    glm::vec2(1.f, 0.f),
+    glm::vec2(0.f, 0.f)
+};
+float CubeModel::uv[48] = {
+
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0
+
+};
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -95,7 +203,7 @@ int main()
     }
     
     game.Init();
-
+    
     double prevTime = 0.0;
     double crntTime = 0.0;
     double timeDiff;
@@ -111,9 +219,9 @@ int main()
         timeDiff = crntTime - prevTime;
         counter++;
         if (timeDiff >= 1.0 / 30.0) {
-            std::string FPS = std::to_string((1.0 / timeDiff) * counter);
-            std::string ms = std::to_string((timeDiff / counter) * 1000);
-            std::cout << FPS << " " << ms << " " << game.entities.size() << std::endl;
+            //std::string FPS = std::to_string((1.0 / timeDiff) * counter);
+            //std::string ms = std::to_string((timeDiff / counter) * 1000);
+            //std::cout << FPS << " " << ms << " " << game.entities.size() << std::endl;
             prevTime = crntTime;
             counter = 0;
         }
@@ -133,6 +241,7 @@ int main()
 
     ResourceManager::Clear();
     glfwTerminate();
+    game.cleanUp();
     gen1.join();
     //gen2.join();
     //destroy.join();

@@ -1,3 +1,4 @@
+#pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -10,10 +11,13 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "ResourceManager.h"
-
 #include <mutex>
 #include <vector>
 #include "Chunk.h"
+#include "CubeModel.h"
+#include "ChunkMesh.h"
+#include "Renderer.h"
+
 class Game
 {
 public:
@@ -28,23 +32,23 @@ public:
 	unsigned int modelLoc;
 	unsigned int viewLoc;
 	unsigned int projectionLoc;
-	std::vector<Chunk> entities;
+	int size;
+	//PerlinNoise pl;
+	std::vector<ChunkMesh> entities;
 	std::vector<std::pair<int, int>> used;
-	// constructor/destructor
+	
 	Game(unsigned int width, unsigned int height);
 	~Game();
-	// initialize game state (load all shaders/textures/levels)
 	void Init();
-	// game loop
 	void ProcessInput(float dt);
 	void Update(float dt);
 	void Render();
 	void generation(bool a);
-	void destroier(GLFWwindow* window);
-	bool perto(std::pair<int, int> i);
+	void cleanUp();
+	int index = 0;
+    
 private:
-	unsigned int VBO, VAO;
-	bool procurar(int x, int z);
+	std::vector<unsigned int> VBO, VAO;
 	int WORLD_SIZE = 16;
 	
 };

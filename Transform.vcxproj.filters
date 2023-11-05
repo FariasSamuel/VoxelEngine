@@ -19,6 +19,12 @@
     <Filter Include="Arquivos de Origem\Shaders">
       <UniqueIdentifier>{f0ea883d-7fea-4c77-ac60-c45ac15ffd8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Arquivos de Origem\Cube">
+      <UniqueIdentifier>{164f1c24-b6d9-4739-b2eb-f058625f6e8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Arquivos de Origem\Loader">
+      <UniqueIdentifier>{361d7574-90fa-483e-aa57-5a6110450678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -30,12 +36,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="Block.h">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Chunk.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
@@ -44,6 +44,27 @@
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Arquivos de Origem\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.h">
+      <Filter>Arquivos de Origem\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="Chunk.cpp">
+      <Filter>Arquivos de Origem\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkMesh.h">
+      <Filter>Arquivos de Origem\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkMesh.cpp">
+      <Filter>Arquivos de Origem\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeModel.cpp">
+      <Filter>Arquivos de Origem\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="RawModel.h">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="PerlinNoiseGenerator.h">
+      <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,9 +82,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
-    <ClInclude Include="Chunk.h">
-      <Filter>Arquivos de Origem</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
@@ -72,6 +90,21 @@
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Arquivos de Origem\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Chunk.h">
+      <Filter>Arquivos de Origem\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Arquivos de Origem\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeModel.h">
+      <Filter>Arquivos de Origem\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader.h">
+      <Filter>Arquivos de Origem</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Arquivos de Origem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
