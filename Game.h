@@ -30,24 +30,27 @@ public:
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
 	Shader s;
+	unsigned int vaoCube;
 	unsigned int modelLoc;
 	unsigned int viewLoc;
 	unsigned int projectionLoc;
 	int size;
 	PerlinNoiseGenerator pl;
 	std::vector<ChunkMesh> entities;
+	std::vector<Block> blocos;
 	std::vector<std::pair<int, int>> used;
 	
 	Game(unsigned int width, unsigned int height);
 	~Game();
 	void Init();
-	void ProcessInput(float dt);
+	void ProcessInput(GLFWwindow* window);
 	void Update(float dt);
 	void Render();
 	void generation(bool a);
+	bool procurar(Block b);
 	void cleanUp();
 	int index = 0;
-    
+	int flag = -1;
 private:
 	std::vector<unsigned int> VBO, VAO;
 	int WORLD_SIZE = 16;

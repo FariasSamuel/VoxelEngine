@@ -299,7 +299,7 @@ void processInput(GLFWwindow* window)
         posz++;
         lastTime = glfwGetTime();
     }
-    
+    game.ProcessInput(window);
         
 }
 

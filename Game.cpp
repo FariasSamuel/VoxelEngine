@@ -21,66 +21,63 @@ void Game::Init()
 {
 	s = ResourceManager::LoadShader("shader.vs", "shader.fs", nullptr, "test");
 	s.Use();
-	std::vector<Block> blocks;
-	for (int x = 0; x < 4; x++) {
-		for (int y = 0; y < 4; y++) {
-			BlockType bt = BlockType::orange;
-			Block b(x , 0, y, bt);
-			blocks.push_back(b);
-		}
-	}
 
-	Chunk c(blocks, glm::vec3(10, 0, 0));
-	ChunkMesh m(c);
-	//entities.push_back(m);
-	/*unsigned int VAO1, VBO1;
-	
-	glGenVertexArrays(1, &VAO1);
-	glGenBuffers(1, &VBO1);
-	glBindVertexArray(VAO1);
+	float vertices[] = {
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.positionsList.size(), &m.positionsList[0], GL_STATIC_DRAW);
+		-0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
 
-	glBindVertexArray(0);
-	this->VAO.push_back(VAO1);
-	this->VBO.push_back(VBO1);
-	for (int x = 0; x < 8; x++) {
-		for (int y = 0; y < 8; y++) {
-			for (int z = 0; z < 8; z++) {
-				BlockType bt = BlockType::orange;
-				Block b(x, y, y-z, bt);
-				blocks.push_back(b);
-				
-			}
-		}
-	}
-	Chunk c1(blocks, glm::vec3(15, 0, 0));
-	ChunkMesh m1(c1);
-	entities.push_back(m1);
-	unsigned int VAO2, VBO2;
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
 
-	glGenVertexArrays(1, &VAO2);
+		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+	};
+
+	unsigned int  VBO2;
+
+	glGenVertexArrays(1, &vaoCube);
 	glGenBuffers(1, &VBO2);
-	glBindVertexArray(VAO2);
+	glBindVertexArray(vaoCube);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m1.positionsList.size(), &m1.positionsList[0], GL_STATIC_DRAW);
-
+	glBindBuffer(GL_ARRAY_BUFFER, vaoCube);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+	//std::cout << sizeof(float) * entities[index].positionsList.size() << std::endl;
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(0);
-	this->VAO.push_back(VAO2);
-	this->VBO.push_back(VBO2);
-	*/
 	projection = pespective(glm::radians(45.0f), (float)Width / (float)Height, 0.1f, 100.0f);
 
 	this->modelLoc = glGetUniformLocation(s.ID, "model");
@@ -132,10 +129,63 @@ void Game::Update(float dt)
 {
 
 }
-
-void Game::ProcessInput(float dt)
+bool Game::procurar(Block b) {
+	for (auto i : blocos) {
+		if (i.x == b.x && i.y == b.y && i.z == b.z) {
+			return true;
+		}
+	}
+	return false;
+}
+void Game::ProcessInput(GLFWwindow* window)
 {
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+		int x = (int)camera.Position.x + floor((int)(5 + (camera.Pitch + 33) / 11) * sin(glm::radians(90 - camera.Yaw)));
+		int y = (int)camera.Position.y - 2;
+		int z = (int)camera.Position.z + floor((int)(5 + (camera.Pitch + 33) / 11) * cos(glm::radians(90 - camera.Yaw)));
+		Block c(x, y, z,orange);
+		if (!procurar(c)) {
+			blocos.push_back(c);
+			
+		}
+	}
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+		int x = (int)camera.Position.x + floor((int)(5 + (camera.Pitch + 33) / 11) * sin(glm::radians(90 - camera.Yaw)));
+		int y = (int)camera.Position.y - 2;
+		int z = (int)camera.Position.z + floor((int)(5 + (camera.Pitch + 33) / 11) * cos(glm::radians(90 - camera.Yaw)));
+		Block c(x, y, z,orange);
+		auto v = std::remove_if(blocos.begin(), blocos.end(), [c](Block i) { return  (i.x == c.x) && (i.y == c.y) && (i.z == c.z);  });
+		std::cout << "BLoco:" << c.x << " " << c.y << " " << c.z << std::endl;
+		for (int i = 0; i < entities.size(); i++)
+		{
+			glm::vec3 origin = entities[i].chunk.origin;
 
+			int disx = (int)abs(origin.x - camera.Position.x);
+			int disz = (int)abs(origin.z - camera.Position.z);
+
+			if (disx <= 32 && disz <= 32) {
+				Chunk chunk = entities[i].chunk;
+				//std::cout << chunk.origin.x << " " << chunk.origin.y << " " << chunk.origin.z << std::endl;
+				auto v1 = std::remove_if(chunk.blocks.begin(), chunk.blocks.end(), [c,chunk](Block i) { return  (c.x == (i.x + chunk.origin.x)) && (i.y == c.y) && (c.z == (i.z + chunk.origin.z));  });
+				if (v1 != chunk.blocks.end()) {
+					flag = i;
+					entities[i].update(chunk);
+					std::cout << "encontrei";
+					break;
+				}
+				std::cout << std::endl;
+				for (auto j : entities[i].chunk.blocks) {
+					
+					//if (j.x == c.x && j.y == c.y) {
+						//std::cout << j.x << " " << j.y << " " << j.z << std::endl;
+					//}
+				}
+
+			}
+
+		}
+
+	}
 }
 
 void Game::Render()
@@ -165,6 +215,22 @@ void Game::Render()
 		VBO.push_back(VBO2);
 		index++;
 	}
+	if (flag != -1) {
+		unsigned int VAO2, VBO2;
+		std::cout << "mudando" << std::endl;
+		glGenVertexArrays(1, &VAO2);
+		glGenBuffers(1, &VBO2);
+		glBindVertexArray(VAO2);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * entities[flag].positionsList.size(), &entities[flag].positionsList[0], GL_STATIC_DRAW);
+		//std::cout << sizeof(float) * entities[index].positionsList.size() << std::endl;
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+		VAO[flag] = VAO2;
+		VBO[flag] = VBO2;
+		flag = -1;
+	}
 	try {
 		//std::cout << entities.size() << std::endl;
 
@@ -183,6 +249,31 @@ void Game::Render()
 
 				glBindVertexArray(VAO[i]);
 				glDrawArrays(GL_TRIANGLES, 0, entities[i].positionsList.size());
+				//glBindVertexArray(0);
+			}
+
+		}
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3((int)camera.Position.x + floor((int)(5 + (camera.Pitch + 33) / 11) * sin(glm::radians(90 - camera.Yaw))), (int)camera.Position.y-2, (int)camera.Position.z + floor((int)(5 + (camera.Pitch + 33) / 11) * cos(glm::radians(90 - camera.Yaw)))));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		glBindVertexArray(vaoCube);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		for (int i = 0; i < blocos.size(); i++)
+		{
+
+			int disx = (int)abs(blocos[i].x - camera.Position.x);
+			int disz = (int)abs(blocos[i].z - camera.Position.z);
+
+			if (disx <= 32 && disz <= 32) {
+
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, glm::vec3(blocos[i].x, blocos[i].y, blocos[i].z));
+				glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+				glBindVertexArray(vaoCube);
+				glDrawArrays(GL_TRIANGLES, 0, 36);
 				//glBindVertexArray(0);
 			}
 

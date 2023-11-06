@@ -32,6 +32,9 @@ ChunkMesh::ChunkMesh(Chunk chunks) {
 
 void ChunkMesh::update(Chunk chunk) {
 	this->chunk = chunk;
+	positionsList.clear();
+	vertices.clear();
+	normalsList.clear();
 	buildmesh();
 	populateLists();
 }
@@ -135,4 +138,5 @@ void ChunkMesh::populateLists() {
 	for (int i = 0; i < normalsList.size(); i++) {
 		normals[i] = normalsList[i];
 	}
+	
 }
