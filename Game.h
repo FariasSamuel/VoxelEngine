@@ -51,6 +51,7 @@ public:
 	void cleanUp();
 	int index = 0;
 	int flag = -1;
+	double lasttime;
 private:
 	std::vector<unsigned int> VBO, VAO;
 	int WORLD_SIZE = 16;

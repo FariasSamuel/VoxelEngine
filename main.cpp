@@ -219,8 +219,8 @@ int main()
         timeDiff = crntTime - prevTime;
         counter++;
         if (timeDiff >= 1.0 / 30.0) {
-            //std::string FPS = std::to_string((1.0 / timeDiff) * counter);
-            //std::string ms = std::to_string((timeDiff / counter) * 1000);
+            std::string FPS = std::to_string((1.0 / timeDiff) * counter);
+            std::string ms = std::to_string((timeDiff / counter) * 1000);
             //std::cout << FPS << " " << ms << " " << game.entities.size() << std::endl;
             prevTime = crntTime;
             counter = 0;

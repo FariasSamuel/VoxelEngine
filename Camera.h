@@ -37,13 +37,13 @@ public:
 	}
 	void processInput(Camera_Movement direction) {
 		if (direction == FORWARD)
-			Position += Front * 0.1f;
+			Position += Front * 0.2f;
 		if (direction == BACKWARD)
-			Position -= Front * 0.1f;
+			Position -= Front * 0.2f;
 		if (direction == LEFT)
-			Position -= Right * 0.1f;
+			Position -= Right * 0.2f;
 		if (direction == RIGHT)
-			Position += Right * 0.1f;
+			Position += Right * 0.2f;
 	}
 	void mouse_input(float xoffset, float yoffset) {
 		xoffset *= 0.1f;

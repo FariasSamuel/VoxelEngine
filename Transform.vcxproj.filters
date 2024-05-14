@@ -106,5 +106,11 @@
     <ClInclude Include="Renderer.h">
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
+    <ClInclude Include="ray.h">
+      <Filter>Arquivos de Origem</Filter>
+    </ClInclude>
+    <ClInclude Include="vec3.h">
+      <Filter>Arquivos de Origem\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

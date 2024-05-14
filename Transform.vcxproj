@@ -172,9 +172,11 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Operations.h" />
+    <ClInclude Include="ray.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="vec3.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
